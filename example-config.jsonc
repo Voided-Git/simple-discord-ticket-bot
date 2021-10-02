@@ -1,0 +1,26 @@
+{
+	"version": 1.0,  // don't change this
+	"token": "BOT_TOKEN_HERE",  // this should be your bot's token
+	"prefix": "+",  // this should be your preferred prefix
+	"open-aliases": [  // this is an example for how open aliases should be added
+		"new",
+		"create"
+	],
+	"close-aliases": [  // this is an example for how close aliases should be added
+		"delete",
+		"remove"
+	],
+	"messages": {
+		/*
+			all messages can use the following formatting:
+			- '\n' indicates a new line when sent
+			- '{}' indicates a placeholder that will be changed (THESE SHOULD NOT BE REMOVED NOR ADDED BUT MOVED AROUND)
+		*/
+        "open.existing-ticket": "You already have an ongoing ticket.",
+        "open.open-ticket": "Ticket created at {}.",
+        "open.ticket": "Please describe your issue in as much detail as possible so the support team can respond to you as quickly as possible.\n\nIf you do not receive a response shortly, please be patient as the support team may be busy with other tickets or not currently available.",
+        "close.no-ticket": "You don't have an ongoing ticket yet, try using {}.",
+        "close.not-ticket-channel": "You can only execute {} in a ticket channel.",
+        "close.close-ticket": "Deleting ticket in 5 seconds."
+	}
+}
