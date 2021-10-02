@@ -12,6 +12,8 @@
 	],
 	"messages": {
 		/*
+			NOTE: emotes cannot be used within JSON due to a formatting issue
+
 			all messages can use the following formatting:
 			- '\n' indicates a new line when sent
 			- '{}' indicates a placeholder that will be changed (THESE SHOULD NOT BE REMOVED NOR ADDED BUT MOVED AROUND)
