@@ -88,7 +88,7 @@ class tickets(commands.Cog):
 
     @commands.command(
         name = "open",
-        aliases = config.close_aliases
+        aliases = config.open_aliases
     )
     @commands.bot_has_permissions(administrator = True)
     async def _open(self, ctx):
