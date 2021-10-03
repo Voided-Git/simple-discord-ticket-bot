@@ -37,7 +37,7 @@ def generate_JSON():
     with open(r"sdtb/config.json", "w+") as f:
         dump(
             {
-                "version": 1.0,
+                "version": 1.1,
                 "token": "BOT_TOKEN_HERE",
                 "prefix": "+",
                 "open-aliases": [],
