@@ -1,7 +1,2 @@
 *.pyc
 *.json
-build/
-dist/
-*.spec
-*.bat
-*.ico
