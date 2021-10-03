@@ -94,7 +94,7 @@ class tickets(commands.Cog):
     async def _open(self, ctx):
         tickets = load_JSON(r"tickets/tickets.json")
 
-        if ctx.message.author.id not in tickets["ticket-users"]:
+        if str(ctx.message.author.id) not in tickets["ticket-users"]:
             tickets["ticket-number"] += 1
 
             if len(str(tickets["ticket-number"])) == 1:
