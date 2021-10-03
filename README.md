@@ -9,7 +9,8 @@ If you're planning to use the release version, run the `setup.exe` and let it ge
 - - - -
 ### **Running the bot** ###
 Make sure to install [Python](https://python.org "Python") and the following packages using `pip install`:
-* [Discord.py](https://discordpy.readthedocs.io/en/stable/ "Discord.py docs") (`pip install discord`)
+* [Discord.py](https://discordpy.readthedocs.io/en/stable/ "Discord.py docs") (`pip install discord` or `py -m pip install discord` on Windows)
+* [Requests](https://pypi.org/project/requests/ "Requests") (`pip install requests` or `py -m pip install requests` on Windows)
 
 After you've installed Python and all the dependencies, you can run the bot by running `bot.py`.
 - - - -
