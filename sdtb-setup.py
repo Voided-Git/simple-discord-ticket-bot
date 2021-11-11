@@ -1,7 +1,7 @@
-from json import dump
+from json import load
 from requests import get
 from sys import exit
-from os import mkdir
+from os import mkdir, rename
 from datetime import datetime
 
 
@@ -9,7 +9,19 @@ def time_now():
     return datetime.now().strftime("[%H:%M:%S]")
 
 
-def generate_JSON():
+def load_JSON(filename):
+    with open(filename, "r") as f:
+        return load(f)
+
+
+def check_version(config):
+    version = float(str(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/version").content).replace("b", "").replace("'", ""))
+
+    if config["version"] != version:
+        print(f"{time_now()} Your version is outdated '{config['version']}' the newest version is '{version}'")
+
+
+def generate_JSON(args = None):
     try:
         mkdir(r"sdtb")
         print(f"{time_now()} Created 'sdtb' directory")
@@ -22,39 +34,66 @@ def generate_JSON():
     except FileExistsError:
         pass
 
-    with open(r"sdtb/tickets/tickets.json", "w+") as f:
-        dump(
-            {
-                "category": 111111111111111111,
-                "support-role": 111111111111111111,
-                "ticket-number": 0,
-                "ticket-users": {}
-            },
-            f, indent = 4
-        )
-    print(f"{time_now()} Created 'tickets.json'")
+    if not args:
+        get_JSON()
 
-    with open(r"sdtb/config.json", "w+") as f:
-        dump(
-            {
-                "version": 1.1,
-                "token": "BOT_TOKEN_HERE",
-                "prefix": "+",
-                "open-aliases": [],
-                "close-aliases": [],
-                "messages":
-                {
-                    "open.existing-ticket": "You already have an ongoing ticket.",
-                    "open.open-ticket": "Ticket created at {}.",
-                    "open.ticket": "Please describe your issue in as much detail as possible so the support team can respond to you as quickly as possible.\n\nIf you do not receive a response shortly, please be patient as the support team may be busy with other tickets or not currently available.",
-                    "close.no-ticket": "You don't have an ongoing ticket yet, try using {}.",
-                    "close.not-ticket-channel": "You can only execute {} in a ticket channel.",
-                    "close.close-ticket": "Deleting ticket in 5 seconds."
-                }
-            },
-            f, indent = 4
-        )
-    print(f"{time_now()} Created 'config.json'")
+    elif args.upper() == "FORCE":
+        try:
+            rename(r"sdtb/config.json", r"sdtb/config.json.old")
+        except FileNotFoundError:
+            pass
+
+        try:
+            rename(r"sdtb/tickets/tickets.json", r"sdtb/tickets/tickets.json.old")
+        except FileNotFoundError:
+            pass
+
+        get_JSON()
+
+
+def get_JSON():
+    try:
+        config = load_JSON(r"sdtb/config.json")
+        check_version(config)
+    except FileNotFoundError:
+        print(f"{time_now()} Downloading 'config.json'")
+        with open(r"sdtb/config.json", "wb") as f:
+            f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/config.json").content)
+        print(f"{time_now()} Downloaded 'config.json'")
+
+    try:
+        load_JSON(r"sdtb/tickets/tickets.json")
+    except FileNotFoundError:
+        print(f"{time_now()} Downloading 'tickets.json'")
+        with open(r"sdtb/tickets/tickets.json", "wb") as f:
+            f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/tickets.json").content)
+        print(f"{time_now()} Downloaded 'tickets.json'")
+
+
+def get_lib():
+    try:
+        mkdir(r"sdtb/lib")
+    except FileExistsError:
+        pass
+
+    print(f"{time_now()} Downloading 'lib'...")
+    with open(r"sdtb/lib/__init__.py", "wb") as f:
+        f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/lib/__init__.py").content)
+    with open(r"sdtb/lib/lib.py", "wb") as f:
+        f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/lib/lib.py").content)
+    print(f"{time_now()} Downloaded 'lib'")
+
+
+def get_files():
+    print(f"{time_now()} Downloading 'bot.py'...")
+    with open(r"sdtb/bot.py", "wb") as f:
+        f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/bot.py").content)
+    print(f"{time_now()} Downloaded 'bot.py'")
+
+    print(f"{time_now()} Downloading 'tickets.py'...")
+    with open(r"sdtb/tickets/tickets.py", "wb") as f:
+        f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/tickets.py").content)
+    print(f"{time_now()} Downloaded 'tickets.py'")
 
 
 while True:
@@ -66,9 +105,17 @@ while True:
         break
 
 while True:
-    full = input("Would you like a full setup or just the default JSON files (F/j)?")
+    full = input("Would you like a full setup, just the default / updated JSON files, just the default / updated bot files or lib (F/j/fi/l)?")
     if full.lower() in ("j", "json"):
-        generate_JSON()
+        generate_JSON("FORCE")
+        exit()
+
+    elif full.lower() in ("l", "lib"):
+        get_lib()
+        exit()
+
+    elif full.lower() in ("fi", "files"):
+        get_files()
         exit()
 
     elif full.upper() in ("F", "FULL"):
@@ -76,25 +123,5 @@ while True:
 
 
 generate_JSON()
-
-print(f"{time_now()} Downloading 'bot.py'...")
-with open(r"sdtb/bot.py", "wb") as f:
-    f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/bot.py").content)
-print(f"{time_now()} Downloaded 'bot.py'")
-
-print(f"{time_now()} Downloading 'tickets.py'...")
-with open(r"sdtb/tickets/tickets.py", "wb") as f:
-    f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/tickets.py").content)
-print(f"{time_now()} Downloaded 'tickets.py'")
-
-try:
-    mkdir(r"sdtb/lib")
-except FileExistsError:
-    pass
-
-print(f"{time_now()} Downloading 'lib'...")
-with open(r"sdtb/lib/__init__.py", "wb") as f:
-    f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/lib/__init__.py").content)
-with open(r"sdtb/lib/lib.py", "wb") as f:
-    f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/lib/lib.py").content)
-print(f"{time_now()} Downloaded 'lib'")
+get_files()
+get_lib()
