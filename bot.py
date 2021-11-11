@@ -1,12 +1,19 @@
 import discord  # noqa
 from discord.ext import commands
-from lib import time_now, config, check_JSON_files, check_version
 from asyncio import sleep
 from time import sleep as s
 from sys import exit
+try:
+    from lib import time_now, config, check_JSON_files, check_version, setup_change
+except ImportError:
+    from datetime import datetime
+    print(f"{datetime.now().strftime('[%H:%M:%S]')} Lib is missing, consider using 'sdtb-setup.exe' to download the required dependencies")
+    s(5)
+    exit()
 
 
 check_version()
+setup_change()
 
 
 if not check_JSON_files():
