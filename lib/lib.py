@@ -1,6 +1,7 @@
 from datetime import datetime
 from json import load, dump
 from requests import get
+from os import rename, listdir
 
 
 def time_now():
@@ -78,6 +79,18 @@ def check_version():
 
     if config.version != version:
         print(f"{time_now()} Your version is outdated '{config.version}' the newest version is '{version}'")
+
+
+def setup_change():
+    """Changes 'sdtb-setup.exe' to 'updater.exe', unless not found, then it's downloaded."""
+    if "updater.exe" in listdir(r"../"):
+        return
+    else:
+        try:
+            rename(r"../sdtb-setup.exe", r"../setup.exe")
+        except FileNotFoundError:
+            with open(r"../updater.exe", "wb") as f:
+                f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/updater.exe").content)
 
 
 class config:
