@@ -1,5 +1,7 @@
 # **PROJECT DISCONTINUED** #
 Check the [simple discord bot](https://github.com/Voided-Git/simple-discord-bot "Simple Discord Bot") repository for the latest project regarding Discord bots, tickets will be available as a feature on the new project bot. The reason for the move is due to a new library being used along with Discord API changes that have happened which make the way the bot works redundant or pointless if there are bots that are already using the new Discord API features.
+
+***A rewrite version of this project is being developed, release date TBD.***
 - - - -
 # Simple Discord Ticket Bot **(SDTB)** #
 A simple ticket bot for your Discord server's needs, written in Python using the Discord API wrapper. A lot of ticket bots for Discord exist all over the web, this one might not be the best one, but give it a try, it's quite simple, and if you ever need help, you can join the official [Discord server](https://discord.gg/DQMgmn6keK "Voided") for support from the community or the developers themselves.
