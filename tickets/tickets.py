@@ -1,12 +1,12 @@
+import asyncio
+from json import dump
+from discord.utils import get
 import discord
 from discord.ext import commands
 from lib import config, load_JSON, check_integer, time_now
-from asyncio import sleep, TimeoutError
-from json import dump
-from discord.utils import get
 
 
-class tickets(commands.Cog):
+class Tickets(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -28,7 +28,7 @@ class tickets(commands.Cog):
                 check = lambda m: m.author.id == ctx.message.author.id and m.channel.id == ctx.message.channel.id,
                 timeout = 30.0
             )
-        except TimeoutError:
+        except asyncio.TimeoutError:
             main.color = discord.Color.random()
             main.description += "\n\n⏲ Timed out."
             return await message.edit(embed = main)
@@ -55,8 +55,8 @@ class tickets(commands.Cog):
                 check = lambda m: m.author.id == ctx.message.author.id and m.channel.id == ctx.message.channel.id,
                 timeout = 30.0
             )
-        except TimeoutError:
-            main.color = discord.Color.random(),
+        except asyncio.TimeoutError:
+            main.color = discord.Color.random()
             main.description += "\n\n⏲ Timed out."
             return await message.edit(embed = main)
 
@@ -79,7 +79,7 @@ class tickets(commands.Cog):
         tickets["category"] = int(category.content)
         tickets["support-role"] = int(support.content)
 
-        with open(r"tickets/tickets.json", "w") as f:
+        with open(r"tickets/tickets.json", "w", encoding = "utf-8") as f:
             dump(tickets, f, indent = 4)
 
         main.color = discord.Color.random()
@@ -117,7 +117,8 @@ class tickets(commands.Cog):
 
             if not role:
                 return print(f"{time_now()} The support role ID is invalid, try reconfiguring the ID using '{config.prefix}setup'")
-            elif not category:
+
+            if not category:
                 return print(f"{time_now()} The category ID is invalid, try reconfiguring the ID using '{config.prefix}setup'")
 
             channel = await ctx.message.guild.create_text_channel(
@@ -127,7 +128,7 @@ class tickets(commands.Cog):
 
             tickets["ticket-users"][str(ctx.message.author.id)] = channel.name
 
-            with open(r"tickets/tickets.json", "w") as f:
+            with open(r"tickets/tickets.json", "w", encoding = "utf-8") as f:
                 dump(tickets, f, indent = 4)
 
             await channel.set_permissions(
@@ -145,12 +146,12 @@ class tickets(commands.Cog):
 
             await ctx.send(embed = discord.Embed(
                 color = discord.Color.random(),
-                description = f"🎫 {config._open_open_ticket.replace('{}', channel.mention)}"
+                description = f"🎫 {config.open_open_ticket.replace('{}', channel.mention)}"
             ))
             embed = discord.Embed(
                 color = discord.Color.random(),
                 title = channel.name.capitalize(),
-                description = config._open_ticket
+                description = config.open_ticket
             )
             embed.set_footer(
                 text = ctx.message.author,
@@ -162,7 +163,7 @@ class tickets(commands.Cog):
 
             await ctx.send(embed = discord.Embed(
                 color = discord.Color.random(),
-                description = f"⚠ {config._open_existing_ticket}"
+                description = f"⚠ {config.open_existing_ticket}"
             ))
 
     @commands.command(
@@ -176,20 +177,20 @@ class tickets(commands.Cog):
         if "ticket-" not in ctx.channel.name:
             await ctx.send(embed = discord.Embed(
                 color = discord.Color.random(),
-                description = f"⚠ {config._close_not_ticket_channel.replace('{}', f'{config.prefix}close')}"
+                description = f"⚠ {config.close_not_ticket_channel.replace('{}', f'{config.prefix}close')}"
             ))
 
         if str(ctx.message.author.id) in tickets["ticket-users"]:
             await ctx.send(embed = discord.Embed(
                 color = discord.Color.random(),
-                description = f"⚠ {config._close_close_ticket}"
+                description = f"⚠ {config.close_close_ticket}"
             ))
-            await sleep(5)
+            await asyncio.sleep(5)
             await ctx.channel.delete()
 
             tickets["ticket-users"].pop(str(ctx.message.author.id))
 
-            with open(r"tickets/tickets.json", "w") as f:
+            with open(r"tickets/tickets.json", "w", encoding = "utf-8") as f:
                 dump(tickets, f, indent = 4)
 
         elif get(ctx.message.guild.roles, id = tickets["support-role"]) in ctx.message.author.roles:
@@ -197,14 +198,14 @@ class tickets(commands.Cog):
                 if tickets["ticket-users"][i] == ctx.message.channel.name:
                     await ctx.send(embed = discord.Embed(
                         color = discord.Color.random(),
-                        description = f"⚠ {config._close_close_ticket}"
+                        description = f"⚠ {config.close_close_ticket}"
                     ))
-                    await sleep(5)
+                    await asyncio.sleep(5)
                     await ctx.channel.delete()
 
                     tickets["ticket-users"].pop(i)
 
-                    with open(r"tickets/tickets.json", "w") as f:
+                    with open(r"tickets/tickets.json", "w", encoding = "utf-8") as f:
                         dump(tickets, f, indent = 4)
 
                     return
@@ -212,9 +213,9 @@ class tickets(commands.Cog):
         else:
             await ctx.send(embed = discord.Embed(
                 color = discord.Color.random(),
-                description = f"⚠ {config._close_no_ticket.replace('{}', f'`{config.prefix}open`')}"
+                description = f"⚠ {config.close_no_ticket.replace('{}', f'`{config.prefix}open`')}"
             ))
 
 
 def setup(bot):
-    bot.add_cog(tickets(bot))
+    bot.add_cog(Tickets(bot))

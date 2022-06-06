@@ -1,7 +1,7 @@
+from os import rename, listdir
 from datetime import datetime
 from json import load, dump
 from requests import get
-from os import rename, listdir
 
 
 def time_now():
@@ -11,7 +11,7 @@ def time_now():
 
 def load_JSON(filename):
     """Loads the specified JSON file."""
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding = "utf-8") as f:
         return load(f)
 
 
@@ -21,7 +21,7 @@ def check_integer(string):
         int(string)
         return True
 
-    except Exception:
+    except ValueError:
         return False
 
 
@@ -34,7 +34,7 @@ def check_JSON_files():
     except FileNotFoundError:
         failed = True
         print(f"{time_now()} config.json file not found")
-        with open(r"config.json", "w+") as f:
+        with open(r"config.json", "w+", encoding = "utf-8") as f:
             dump(
                 {
                     "token": "BOT_TOKEN_HERE",
@@ -55,7 +55,7 @@ def check_JSON_files():
     except FileNotFoundError:
         failed = True
         print(f"{time_now()} tickets.json file not found")
-        with open(r"tickets/tickets.json", "w+") as f:
+        with open(r"tickets/tickets.json", "w+", encoding = "utf-8") as f:
             dump(
                 {
                     "category": 111111111111111111,
@@ -69,8 +69,7 @@ def check_JSON_files():
     if failed:
         return False
 
-    else:
-        return True
+    return True
 
 
 def check_version():
@@ -85,12 +84,12 @@ def setup_change():
     """Changes 'sdtb-setup.exe' to 'updater.exe', unless not found, then it's downloaded."""
     if "updater.exe" in listdir(r"../"):
         return
-    else:
-        try:
-            rename(r"../sdtb-setup.exe", r"../setup.exe")
-        except FileNotFoundError:
-            with open(r"../updater.exe", "wb") as f:
-                f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/updater.exe").content)
+
+    try:
+        rename(r"../sdtb-setup.exe", r"../setup.exe")
+    except FileNotFoundError:
+        with open(r"../updater.exe", "wb") as f:
+            f.write(get("https://rryan2448.000webhostapp.com/simple-discord-ticket-bot/updater.exe").content)
 
 
 class config:
@@ -102,9 +101,9 @@ class config:
     prefix = config["prefix"]
     open_aliases = config["open-aliases"]
     close_aliases = config["close-aliases"]
-    _open_existing_ticket = config["messages"]["open.existing-ticket"]
-    _open_open_ticket = config["messages"]["open.open-ticket"]
-    _open_ticket = config["messages"]["open.ticket"]
-    _close_no_ticket = config["messages"]["close.no-ticket"]
-    _close_not_ticket_channel = config["messages"]["close.not-ticket-channel"]
-    _close_close_ticket = config["messages"]["close.close-ticket"]
+    open_existing_ticket = config["messages"]["open.existing-ticket"]
+    open_open_ticket = config["messages"]["open.open-ticket"]
+    open_ticket = config["messages"]["open.ticket"]
+    close_no_ticket = config["messages"]["close.no-ticket"]
+    close_not_ticket_channel = config["messages"]["close.not-ticket-channel"]
+    close_close_ticket = config["messages"]["close.close-ticket"]
