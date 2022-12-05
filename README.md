@@ -4,7 +4,7 @@ Check the [simple discord bot](https://github.com/Voided-Git/simple-discord-bot 
 ***A rewrite version of this project is being developed, release date TBD.***
 - - - -
 # Simple Discord Ticket Bot **(SDTB)** #
-A simple ticket bot for your Discord server's needs, written in Python using the Discord API wrapper. A lot of ticket bots for Discord exist all over the web, this one might not be the best one, but give it a try, it's quite simple, and if you ever need help, you can join the official [Discord server](https://discord.gg/DQMgmn6keK "Voided") for support from the community or the developers themselves.
+A simple ticket bot for your Discord server's needs, written in Python using the Discord API wrapper. A lot of ticket bots for Discord exist all over the web, this one might not be the best one, but give it a try, it's quite simple, and if you ever need help, you can join the official [Discord server](https://discord.com "Voided") for support from the community or the developers themselves.
 - - - -
 ### **Setup using the source code** ###
 If you're planning to use the source code instead of the .exe, run `setup.py` and let it generate the essential JSON files required for operation. You can edit `config.json` to suit your needs and preferences, however you shouldn't directly edit `tickets.json` as you can configure it within Discord.
